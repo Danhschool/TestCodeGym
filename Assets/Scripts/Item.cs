@@ -3,6 +3,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     [SerializeField] private float lifetime = 5f;
+    [SerializeField] private int scoreValue = 1;
+
+    private bool collected;
 
     private void Awake()
     {
@@ -21,10 +24,19 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<PlayerController>() != null)
+        if (collected) return;
+        if (other.GetComponentInParent<PlayerController>() == null) return;
+
+        collected = true;
+
+        if (GameManager.Instance != null)
         {
-            Destroy(gameObject);
+            GameManager.Instance.AddScore(scoreValue);
         }
+
+        Debug.Log("Player collected an item: " + GameManager.Instance.Score);
+
+        Destroy(gameObject);
     }
 }
 
