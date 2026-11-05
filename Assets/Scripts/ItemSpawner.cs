@@ -9,6 +9,8 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField, Range(0f, 0.4f)] private float viewportPadding = 0.05f;
     [SerializeField] private Camera mainCamera;
 
+    private Coroutine spawnRoutine;
+
     private void Awake()
     {
         if (mainCamera == null)
@@ -19,7 +21,16 @@ public class ItemSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(SpawnRoutine());
+        spawnRoutine = StartCoroutine(SpawnRoutine());
+    }
+
+    public void StopSpawning()
+    {
+        if (spawnRoutine != null)
+        {
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
     }
 
     private IEnumerator SpawnRoutine()
